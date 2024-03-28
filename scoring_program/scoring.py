@@ -29,12 +29,12 @@ real_dict = {id_: post_process_sql(real_dict[id_]) for id_ in real_dict}
 pred_dict = {id_: post_process_sql(pred_dict[id_]) for id_ in pred_dict}
 
 current_real_dir = os.path.dirname(os.path.realpath(__file__))
-db_path = os.path.join(current_real_dir, 'mimic_iv.sqlite')
+db_path = os.path.join(current_real_dir, 'mimic_iv.sql')
 if not os.path.exists(db_path):
     raise Exception('File does not exist: %s' % db_path)
 
 num_workers = mp.cpu_count()
-if num_workers > 1:
+if num_workers == 0:
     from scoring_utils import execute_all_distributed
     real_result = execute_all_distributed(real_dict, db_path, tag='real', num_workers=num_workers)
     pred_result = execute_all_distributed(pred_dict, db_path, tag='pred', num_workers=num_workers)
